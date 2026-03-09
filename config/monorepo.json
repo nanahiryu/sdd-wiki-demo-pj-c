@@ -1,0 +1,4 @@
+{
+  "name": "sdd-wiki-demo-pj-c",
+  "plugins": ["plugin-alpha", "plugin-beta"]
+}
