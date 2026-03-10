@@ -1,5 +1,7 @@
 # plugin-alpha: Getting Started
 
+> wiki sync テスト用に更新しました。
+
 plugin-alpha のセットアップ手順です。
 
 ## インストール
