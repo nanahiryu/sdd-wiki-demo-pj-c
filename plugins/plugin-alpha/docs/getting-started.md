@@ -1,6 +1,6 @@
 # plugin-alpha: Getting Started
 
-> wiki sync テスト用に更新しました。
+> mappings 方式のテスト
 
 plugin-alpha のセットアップ手順です。
 
