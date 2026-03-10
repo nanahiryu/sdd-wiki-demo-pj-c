@@ -1,4 +1,4 @@
-# pj-c (モノレポ): plugins/*/docs/ の変更を含む PR が main に merge されたら wiki-app に同期
+# pj-c (モノレポ): plugins の docs 変更を含む PR が main に merge されたら wiki-app に同期
 name: Sync Docs to Wiki
 
 on:
@@ -7,43 +7,19 @@ on:
     types: [closed]
     paths:
       - "plugins/*/docs/**"
+      - "plugins/*/spec/**"
 
 jobs:
-  detect-changes:
-    if: github.event.pull_request.merged == true
-    runs-on: ubuntu-latest
-    outputs:
-      plugins: ${{ steps.detect.outputs.plugins }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect changed plugins
-        id: detect
-        run: |
-          # PR の base..head で変更された plugins/*/docs/ からプラグイン名を抽出
-          CHANGED=$(git diff --name-only \
-            ${{ github.event.pull_request.base.sha }} \
-            ${{ github.event.pull_request.head.sha }} \
-            -- 'plugins/*/docs/' \
-            | cut -d'/' -f2 \
-            | sort -u \
-            | jq -R -s -c 'split("\n") | map(select(length > 0))')
-          echo "plugins=$CHANGED" >> "$GITHUB_OUTPUT"
-          echo "Changed plugins: $CHANGED"
-
   sync:
-    needs: detect-changes
-    if: needs.detect-changes.outputs.plugins != '[]'
-    strategy:
-      matrix:
-        plugin: ${{ fromJSON(needs.detect-changes.outputs.plugins) }}
+    if: github.event.pull_request.merged == true
     uses: nanahiryu/sdd-wiki-demo-wiki-app/.github/workflows/receive-docs.yml@main
     with:
       source-repo: sdd-wiki-demo-pj-c
-      docs-path: plugins/${{ matrix.plugin }}/docs
-      dest-path: docs/pj-c/${{ matrix.plugin }}
+      mappings: |
+        [
+          {"docs-path": "plugins/plugin-alpha/docs", "dest-path": "docs/pj-c/plugin-alpha"},
+          {"docs-path": "plugins/plugin-beta/spec", "dest-path": "docs/pj-c/plugin-beta"}
+        ]
     secrets:
       GH_APP_ID: ${{ secrets.GH_APP_ID }}
       GH_APP_PRIVATE_KEY: ${{ secrets.GH_APP_PRIVATE_KEY }}
