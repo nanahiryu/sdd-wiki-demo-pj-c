@@ -17,8 +17,8 @@ jobs:
       source-repo: sdd-wiki-demo-pj-c
       mappings: |
         [
-          {"docs-path": "plugins/plugin-alpha/docs", "dest-path": "docs/pj-c/plugin-alpha"},
-          {"docs-path": "plugins/plugin-beta/spec", "dest-path": "docs/pj-c/plugin-beta"}
+          {"docs-path": "plugins/plugin-alpha/docs", "dest-path": "plugin-alpha"},
+          {"docs-path": "plugins/plugin-beta/spec", "dest-path": "plugin-beta"}
         ]
     secrets:
       GH_APP_ID: ${{ secrets.GH_APP_ID }}
